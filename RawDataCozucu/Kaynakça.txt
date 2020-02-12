@@ -1,0 +1,41 @@
+https://www.programmingalgorithms.com/algorithm/yuv-to-rgb
+http://hasullivan.com/2016/05/17/color-space-conversion-in-c/
+https://stackoverflow.com/questions/6959275/c-sharp-convert-yuv-422-to-rgb
+
+https://denizozkan92.wordpress.com/2015/08/22/c-goruntu-isleme-1/
+
+yatay scroll konumlandýrma ;
+https://www.c-sharpcorner.com/uploadfile/mahesh/horizontal-scrollbar-in-C-Sharp/
+
+
+
+       
+
+        private void yuvtoRGB(frame[] frames, int en, int boy)
+        {
+            byte[] rgb = new byte[en * boy * 4];
+            Bitmap bm = new Bitmap(en, boy);
+            int count = frames.Length;
+            for (int y = 0; y < count; y++)
+            {
+                for (int i = 0; i < en; i++)
+                {
+                    for (int j = 0; j < boy; j++)
+                    {
+                        double r = (frames[y].yDegerleri[i] + 1.4075); //* (v[k] - 128));
+                        double g = (frames[y].yDegerleri[i] - 0.3455); //* (u[j] - 128) - (0.7169 * (v[k] - 128)));
+                        double b = (frames[y].yDegerleri[i] + 1.7790); //* (u[j] - 128));
+                        rgb[4 * (i * boy + j) + 3] = 255;
+                        rgb[4 * (i * boy + j) + 2] = (byte)Math.Round(r > 255 ? 255 : r < 0 ? 0 : r);
+                        rgb[4 * (i * boy + j) + 1] = (byte)Math.Round(g > 255 ? 255 : g < 0 ? 0 : g);
+                        rgb[4 * (i * boy + j) + 0] = (byte)Math.Round(b > 255 ? 255 : b < 0 ? 0 : b);
+
+                        Color c = Color.FromArgb(rgb[4 * (i * boy + j) + 3], rgb[4 * (i * boy + j) + 2], rgb[4 * (i * boy + j) + 1], rgb[4 * (i * boy + j) + 0]);
+                        bm.SetPixel(i, j, c);
+                    }
+                }
+                bm.Save("frame" + (y + 1) + ".bmp");
+                pictureBox1.Image = bm;
+                this.Update();
+            }
+        }
